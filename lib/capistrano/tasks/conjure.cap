@@ -1,0 +1,34 @@
+require "conjure"
+
+namespace :conjure do
+  desc "Provision a new server with Conjure"
+  task :provision do
+    instance = Conjure::Instance.create conjure_options
+    puts "Provisioning complete. Add the following settings to Capistrano:"
+    [:ip_address, :port, :user].each { |k, v| puts "  #{k}: #{instance.send k}" }
+    puts "Create these files on the server before deploying:" if instance.pending_files.any?
+    instance.pending_files.each { |f| puts "  #{f}" }
+  end
+
+  desc "Update an existing server with Conjure"
+  task :update do
+    ip_address = roles(:all).first.hostname
+    Conjure::Instance.update conjure_options.merge(ip_address: ip_address)
+    puts "Update complete."
+  end
+
+  def conjure_options
+    options_from_cap_environment.merge(options_from_user)
+  end
+
+  def options_from_cap_environment
+    {
+      app_name: fetch(:application),
+      rails_env: (fetch(:rails_env) || fetch(:stage)),
+    }
+  end
+
+  def options_from_user
+    fetch(:conjure_options, {})
+  end
+end
