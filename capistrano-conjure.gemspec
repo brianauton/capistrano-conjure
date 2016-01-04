@@ -10,12 +10,12 @@ Gem::Specification.new do |spec|
   spec.email         = ["brianauton@gmail.com"]
   spec.summary       = "Conjure provisioning support for Capistrano 3.x"
   spec.homepage      = "https://github.com/brianauton/capistrano-conjure"
+  spec.license       = "MIT"
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.require_paths = ["lib"]
   spec.add_dependency "capistrano", "~> 3.0"
-  spec.add_dependency "capistrano-passenger"
   spec.add_dependency "conjure", "~> 0.2.10"
   spec.add_development_dependency "bundler", "~> 1.10"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rspec"
+  spec.add_development_dependency "rspec", "~> 3.4"
 end
